@@ -80,7 +80,8 @@ pista1(E):-precio(6,V1), select(V1,E,E2),
 % 2. El cliente que ordenó semilla de lino pagó más que la persona que ordenó pasto de trigo.
 pista2(E):-superAlimento(semillaDeLino,V1), precio(PrecioSemillaDeLino,V1),
            superAlimento(pastoDeTrigo,V2), precio(PrecioPastoDeTrigo,V2),
-           PrecioSemillaDeLino > PrecioPastoDeTrigo, member(V1,E).
+           PrecioSemillaDeLino > PrecioPastoDeTrigo,
+           member(V1,E), member(V2,E).
 
 
 % 3. Isabel pidió semillas de chia.
