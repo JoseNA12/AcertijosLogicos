@@ -34,7 +34,16 @@ clues(
       Smoothies,   % la estructura del acertijo va atando todo
 
    [
-     pista4(Smoothies)
+     pista1(Smoothies),
+     pista2(Smoothies),
+     pista3(Smoothies),
+     pista4(Smoothies),
+     pista5(Smoothies),
+     % pista6(Smoothies),
+     pista7(Smoothies)
+     % pista8(Smoothies),
+     % pista9(Smoothies),
+     % pista10(Smoothies)
      % Pregunta: 11.    ¿Quién pidió mandarina?
    ]).
    
@@ -57,6 +66,8 @@ queries(
 % Super alimento: pasto de trigo, semilla de lino, gengibre, semillas de chia, quinoa
 % Fruta: frambuesas, arándanos, bananos, naranjas, mandarinas
 %
+% resolver(smoothies, Struct, Sol).
+%
 
 % 1. El cliente que pagó $6 no pidió arándanos.
 pista1(E):-precio(6,V1), select(V1,E,E2),
@@ -67,8 +78,9 @@ pista1(E):-precio(6,V1), select(V1,E,E2),
 
 
 % 2. El cliente que ordenó semilla de lino pagó más que la persona que ordenó pasto de trigo.
-pista2(E):-superAlimento(semillaDeLino,V1). % PrecioPagado is obtener precio de la semillaDeLino
-% NO SE
+pista2(E):-superAlimento(semillaDeLino,V1), precio(PrecioSemillaDeLino,V1),
+           superAlimento(pastoDeTrigo,V2), precio(PrecioPastoDeTrigo,V2),
+           PrecioSemillaDeLino > PrecioPastoDeTrigo, member(V1,E).
 
 
 % 3. Isabel pidió semillas de chia.
@@ -78,14 +90,19 @@ pista3(E):-cliente(isabel,V1),superAlimento(semillasDeChia,V1),member(V1,E).
   % - El cliente que solicitó gengibre es Paulette
 pista4(E):- cliente(paulette,V1),superAlimento(gengibre,V1),member(V1,E).
 
-% - ó El cliente que solicitó gengibre es la persona que pagó $10.
+  % - ó El cliente que solicitó gengibre es la persona que pagó $10.
 pista4(E):-superAlimento(gengibre,V1),precio(10,V1),select(V1,E,E2),
            cliente(paulette,V2),member(V2,E2).
 
 % 5. Paulette, el cliente que pidió arándanos y la persona que pidió naranjas, son tres personas distintas.
-
+pista5(E):-fruta(arandanos,V1), select(V1,E,E2),
+           fruta(naranjas,V2), select(V2,E2,E3),
+           cliente(paulette,V3), member(V3,E3).
 
 % 6. El cliente que pidió naranjas pagó 1 dólar más que la persona que pidió bananos.
+pista6(E):-fruta(naranjas,V1), precio(PrecioNaranjas,V1),
+           fruta(bananos,V2), precio(PrecioBananos,V2),
+           (PrecioNaranjas + 1) = PrecioBananos, member(V1,E).
 
 % 7. Otis, o pagó $6 o pagó $10.
  % - Otis pagó $6
@@ -95,13 +112,16 @@ pista7(E):-cliente(otis,V1),precio(6,V1),member(V1,E).
 pista7(E):-cliente(otis,V1),precio(10,V1),member(V1,E).
 
 % 8. La persona que pidió quinoa pagó $3 más que Mercedes.
-pista8(E):-superAlimento(quinoa,V1), cliente(mercedes,V2),
-           precio(W,V2), precio(Q,V1), (W + 3) = Q, member(V1,E).
-% NO ESTOY SEGURO.
+pista8(E):-superAlimento(quinoa,V1), precio(PrecioQuinoa,V1),
+           cliente(mercedes,V2), precio(W,V2),
+           (W + 3) = PrecioQuinoa, member(V1,E).
 
 % 9. Sobre Paulette y la persona que ordenó frambuesas: una pidió pasto de trigo y la otra persona pagó $8.
 
 % 10. Isabel pagó 3 dólares menos que Amelia.
+pista10(E):-cliente(amelia,V1), precio(Q,V1),
+            cliente(isabel,V2), precio(P,V2),
+            (P - 3) = Q, member(V2,E).
 
 
 
