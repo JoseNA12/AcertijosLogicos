@@ -22,19 +22,27 @@ resolver(Acertijo, Structure, Solucion) :-
          mostrar(Structure).              % Muestra estructura en forma legible.
 
 
-structure(smoothies, [% orden(5, _, _, _),
-                      orden(6, _, _, _),
+structure(smoothies, [orden(6, _, _, _),
                       orden(7, _, _, _),
                       orden(8, _, _, _),
                       orden(9, _, _, _),
-                      orden(10, _, _, _)]). % orden(Precio, Cliente, SuperAlimento, Fruta)
-                  
+                      orden(10, _, _, _)
+                      ]). % orden(Precio, Cliente, SuperAlimento, Fruta)
+
+structure(cruceros, [viaje(_,_,_,1983),
+                     viaje(_,_,_,1984),
+                     viaje(_,_,_,1985),
+                     viaje(_,_,_,1986),
+                     viaje(_,_,_,1987),
+                     viaje(_,_,_,1988),
+                     viaje(_,_,_,1989)
+                     ]). % viaje(Viajero, Crucero, Destino, Año)
+
 clues(
       smoothies,   % identifica las pistas como del acertijo "smoothies"
       Smoothies,   % la estructura del acertijo va atando todo
 
-   [
-     pista1(Smoothies),
+   [ pista1(Smoothies),
      pista2(Smoothies),
      pista3(Smoothies),
      pista4(Smoothies),
@@ -45,6 +53,28 @@ clues(
      pista9(Smoothies),
      pista10(Smoothies)
      % Pregunta: 11.    ¿Quién pidió mandarina?
+   ]).
+   
+clues(
+      viajes,   % identifica las pistas como del acertijo "smoothies"
+      Viajes,   % la estructura del acertijo va atando todo
+
+   [ pista1(Viajes),
+     pista2(Viajes),
+     pista3(Viajes),
+     pista4(Viajes),
+     pista5(Viajes),
+     pista6(Viajes),
+     pista7(Viajes),
+     pista8(Viajes),
+     pista9(Viajes),
+     pista10(Viajes),
+     pista11(Viajes),
+     pista12(Viajes),
+     pista13(Viajes),
+     pista14(Viajes),
+     pista15(Viajes),
+     pista16(Viajes)
    ]).
    
 queries(
@@ -61,6 +91,9 @@ queries(
           ['La persona que pidio mandarina fue ', QuienPidioMadarina]
         ]).
 
+
+
+% CASO 1: Smoothies
 %
 % Cliente: amelia, mercedes, paulette, isabel, otis
 % Super alimento: pasto de trigo, semilla de lino, gengibre, semillas de chia, quinoa
@@ -106,7 +139,7 @@ pista6(E):-fruta(naranjas,V1), precio(PrecioNaranjas,V1),
            member(V1,E), select(V1,E,E2),
            fruta(bananos,V2), precio(PrecioBananos,V2),
            member(V2,E2), select(V2,E2,_),
-           PrecioBananos < PrecioNaranjas.
+           PrecioNaranjas is (PrecioBananos + 1).
 
 % 7. Otis, o pagó $6 o pagó $10.
  % - Otis pagó $6
@@ -128,23 +161,42 @@ pista9(E):-cliente(paulette,V1), superAlimento(pastoDeTrigo,V1),
            fruta(frambuesas,V2), precio(8,V2),
            member(V2,E2), select(V2,E2,_).
            
-pista9(E):-fruta(frambuesas,V1), precio(8,V1),
-           member(V1,E), select(V1,E,E2),
-           cliente(paulette,V2), superAlimento(pastoDeTrigo,V2),
-           member(V2,E2), select(V2,E2,_).
+pista9(E):-cliente(paulette,V3), precio(8,V3),
+           member(V3,E), select(V3,E,E2),
+           fruta(frambuesas,V4), superAlimento(pastoDeTrigo,V4),
+           member(V4,E2), select(V4,E2,_).
+
 
 % 10. Isabel pagó 3 dólares menos que Amelia.
 pista10(E):-cliente(amelia,V1), precio(Q,V1),
             member(V1,E), select(V1,E,E2),
             cliente(isabel,V2), precio(P,V2),
             member(V2,E2), select(V2,E2,_),
-            P is (Q - 3).
+            P is (Q - 3). % mas que Amelia: P is (Q + 3).
 
-
-
-cliente(Cliente,orden(_,Cliente,_,_)).
-superAlimento(SuperAlimento,orden(_,_,SuperAlimento,_)).
-fruta(Fruta,orden(_,_,_,Fruta)).
-precio(Precio,orden(Precio,_,_,_)).
+cliente(Cliente, orden(_,Cliente,_,_)).
+superAlimento(SuperAlimento, orden(_,_,SuperAlimento,_)).
+fruta(Fruta, orden(_,_,_,Fruta)).
+precio(Precio, orden(Precio,_,_,_)).
 
 % structure(smoothies,E), pista1(E).
+
+
+
+% CASO 2: Viajes
+%
+% Viajeros: bradley, eugene, francis, greg, kathy, lee, natasha
+% Crucero: azureSeas, baroness, caprica, farralon, neptunia, silverShores, trinity
+% Destino: barbados, grenada, jamaica, martinique, puertoRico, saintLucia, trinidad
+%
+% resolver(viajes, Struct, Sol).
+%
+
+
+
+viajero(Viajero, viaje(Viajero,_,_,_)).
+crucero(Crucero, viaje(_,Crucero,_,_)).
+destino(Destino, viaje(_,_,Destino,_)).
+anio(Anio, viaje(_,_,_,Anio)).
+
+% structure(viajes,E), pista1(E).
