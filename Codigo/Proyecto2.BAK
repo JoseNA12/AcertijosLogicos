@@ -192,6 +192,68 @@ precio(Precio, orden(Precio,_,_,_)).
 % resolver(viajes, Struct, Sol).
 %
 
+% 1. Eugene no viajó en el crucero Azure Seas.
+pista1(E):-viajero(eugene,V1), select(V1,E,E2),
+          crucero(azureSeas,V2), member(V2,E2).
+
+% 2. La persona que fue a Trinidad zarpó 1 año antes que Lee.
+pista2(E):-destino(trinidad,V1), anio(AnioTrinidad,V1),
+           member(V1,E), select(V1,E,E2),
+           viajero(lee,V2), anio(AnioLee,V2),
+           member(V2,E2),
+           AnioTrinidad is (AnioLee - 1).
+
+% 3. La persona que se embarcó en el crucero Silver Shores es Francis o es quien viajó en 1984.
+pista3(E):-crucero(silverShores,V1), viajero(francis,V1), select(V1,E,E2),
+           anio(1984,V2), member(V2,E2).
+
+pista3(E):-crucero(silverShores,V1), anio(1984,V1), select(V1,E,E2),
+           viajero(francis,V2), member(V2,E2).
+           
+
+% 4. Los siete viajeros son: la persona que fue a Saint Lucia, Greg, la persona que se
+%    embarcó en el crucero Neptunia, la persona que viajó en 1987, la persona que tomó el crucero Trinity,
+%    la persona que se embarcó en el crucero Baroness y la persona que tomó un crucero en 1986.
+
+
+% 5. Sobre los que tomaron el crucero Farralon y el crucero Caprica, uno es Greg y el otro fue a Martinique.
+
+
+% 6. La persona que fue a Puerto Rico viajó 1 año después de la persona que tomó el crucero Silver Shores.
+
+
+% 7. Kathy no viajó en el crucero Azure Seas.
+pista7(E):- crucero(azureSeas,V1), select(V1,E,E2),
+            viajero(kathy,V2), member(V2,E2).
+
+
+% 8. Natasha viajó ya sea en el crucero Baroness o en el crucero de 1985.
+
+
+% 9. La persona que fue a Martinique está entre Eugene y la persona que tomó el crucero Caprica.
+
+
+% 10. La persona que tomó el crucero de 1987 no fue la misma que viajó en el crucero Caprica.
+
+
+% 11. Sobre Francis y la persona que fue a Trinidad: uno estuvo en el crucero de 1983 y el otro tomó el crucero Neptunia.
+
+
+% 12. Bradley, o fue a Jamaica o más bien tomó el crucero de 1987.
+
+
+% 13. La persona que fue a Grenada viajó 2 años después que Kathy.
+
+
+% 14. La persona que tomó el crucero Neptunia lo hizo 1 year año después de que quién tomó el crucero Silver Shores.
+
+
+% 15. La persona que viajó en el crucero Trinity zarpó 1 año después de quien tomó el crucero Baroness.
+
+
+% 16. Uno de los viajeros fue a Barbados.
+
+
 
 
 viajero(Viajero, viaje(Viajero,_,_,_)).
