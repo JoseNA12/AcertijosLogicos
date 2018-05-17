@@ -22,12 +22,12 @@ resolver(Acertijo, Structure, Solucion) :-
          mostrar(Structure).              % Muestra estructura en forma legible.
 
 
-structure(smoothies, [%orden(5, _, _, _),
+structure(smoothies, [% orden(5, _, _, _),
                       orden(6, _, _, _),
                       orden(7, _, _, _),
                       orden(8, _, _, _),
                       orden(9, _, _, _),
-                      orden(10, _, _, _)]). % orden(Precio, Cliente, SuperAlimento)
+                      orden(10, _, _, _)]). % orden(Precio, Cliente, SuperAlimento, Fruta)
                   
 clues(
       smoothies,   % identifica las pistas como del acertijo "smoothies"
@@ -42,7 +42,7 @@ clues(
      pista6(Smoothies),
      pista7(Smoothies),
      pista8(Smoothies),
-     % pista9(Smoothies),
+     pista9(Smoothies),
      pista10(Smoothies)
      % Pregunta: 11.    ¿Quién pidió mandarina?
    ]).
@@ -89,11 +89,12 @@ pista3(E):-cliente(isabel,V1),superAlimento(semillasDeChia,V1),member(V1,E).
 
 % 4. El cliente que solicitó gengibre es Paulette o es la persona que pagó $10.
   % - El cliente que solicitó gengibre es Paulette
-pista4(E):- cliente(paulette,V1),superAlimento(gengibre,V1),member(V1,E).
+pista4(E):-cliente(paulette,V1), superAlimento(gengibre,V1), select(V1,E,E2),
+           precio(10,V2), member(V2,E2).
 
   % - ó El cliente que solicitó gengibre es la persona que pagó $10.
-pista4(E):-superAlimento(gengibre,V1),precio(10,V1),select(V1,E,E2),
-           cliente(paulette,V2),member(V2,E2).
+pista4(E):-superAlimento(gengibre,V1), precio(10,V1), select(V1,E,E2),
+           cliente(paulette,V2), member(V2,E2).
 
 % 5. Paulette, el cliente que pidió arándanos y la persona que pidió naranjas, son tres personas distintas.
 pista5(E):-fruta(arandanos,V1), select(V1,E,E2),
@@ -105,30 +106,39 @@ pista6(E):-fruta(naranjas,V1), precio(PrecioNaranjas,V1),
            member(V1,E), select(V1,E,E2),
            fruta(bananos,V2), precio(PrecioBananos,V2),
            member(V2,E2), select(V2,E2,_),
-           (PrecioNaranjas + 1) = PrecioBananos.
+           PrecioBananos < PrecioNaranjas.
 
 % 7. Otis, o pagó $6 o pagó $10.
  % - Otis pagó $6
-pista7(E):-cliente(otis,V1),precio(6,V1),member(V1,E).
+pista7(E):-cliente(otis,V1), precio(6,V1), member(V1,E).
 
  % - u Otis pagó 10
-pista7(E):-cliente(otis,V1),precio(10,V1),member(V1,E).
+pista7(E):-cliente(otis,V1), precio(10,V1), member(V1,E).
 
 % 8. La persona que pidió quinoa pagó $3 más que Mercedes.
 pista8(E):-superAlimento(quinoa,V1), precio(PrecioQuinoa,V1),
            member(V1,E), select(V1,E,E2),
            cliente(mercedes,V2), precio(W,V2),
            member(V2,E2), select(V2,E2,_),
-           (W + 3) = PrecioQuinoa.
+           PrecioQuinoa is (W + 3).
 
 % 9. Sobre Paulette y la persona que ordenó frambuesas: una pidió pasto de trigo y la otra persona pagó $8.
+pista9(E):-cliente(paulette,V1), superAlimento(pastoDeTrigo,V1),
+           member(V1,E), select(V1,E,E2),
+           fruta(frambuesas,V2), precio(8,V2),
+           member(V2,E2), select(V2,E2,_).
+           
+pista9(E):-fruta(frambuesas,V1), precio(8,V1),
+           member(V1,E), select(V1,E,E2),
+           cliente(paulette,V2), superAlimento(pastoDeTrigo,V2),
+           member(V2,E2), select(V2,E2,_).
 
 % 10. Isabel pagó 3 dólares menos que Amelia.
 pista10(E):-cliente(amelia,V1), precio(Q,V1),
             member(V1,E), select(V1,E,E2),
             cliente(isabel,V2), precio(P,V2),
             member(V2,E2), select(V2,E2,_),
-            (P - 3) = Q.
+            P is (Q - 3).
 
 
 
@@ -137,4 +147,4 @@ superAlimento(SuperAlimento,orden(_,_,SuperAlimento,_)).
 fruta(Fruta,orden(_,_,_,Fruta)).
 precio(Precio,orden(Precio,_,_,_)).
 
-% structure(compras,E), pista(E).
+% structure(smoothies,E), pista1(E).
