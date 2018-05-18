@@ -250,26 +250,48 @@ pista8(E):-viajero(natalia,V1), crucero(baroness,V1), member(V1,E).
 pista8(E):-viajero(natalia,V1), anio(1985,V1), member(V1,E).
 
 % 9. La persona que fue a Martinique está entre Eugene y la persona que tomó el crucero Caprica.
-
+pista9(E):-destino(martinique,V1), viajero(eugene,V1), member(V1,E).
+pista9(E):-destino(martinique,V2), crucero(caprica,V2), member(V2,E).
 
 % 10. La persona que tomó el crucero de 1987 no fue la misma que viajó en el crucero Caprica.
-
+pista10(E):-anio(1987,V1), select(V1,E,E2),
+            crucero(caprica,V2), member(V2,E2).
 
 % 11. Sobre Francis y la persona que fue a Trinidad: uno estuvo en el crucero de 1983 y el otro tomó el crucero Neptunia.
+pista11(E):-viajero(francis,V1), anio(1983,V1),
+            member(V1,E), select(V1,E,E2),
+            destino(trinidad,V2), crucero(neptunia,V2),
+            member(V2,E2), select(V2,E2,_).
 
+pista11(E):-viajero(francis,V1), crucero(neptunia,V1),
+            member(V1,E), select(V1,E,E2),
+            destino(trinidad,V2), anio(1983,V1),
+            member(V2,E2), select(V2,E2,_).
 
 % 12. Bradley, o fue a Jamaica o más bien tomó el crucero de 1987.
 pista12(E):-viajero(bradley,V1), destino(jamaica,V1), member(V1,E).
 pista12(E):-viajero(bradley,V2), anio(1987,V2), member(V2,E).
 
 % 13. La persona que fue a Grenada viajó 2 años después que Kathy.
-
+pista13(E):-destino(grenada,V1), anio(AnioGrenada,V1),
+            member(V1,E), select(V1,E,E2),
+            viajero(kathy,V2), anio(AnioKathy,V2),
+            member(V2,E2), select(V2,E2,_),
+            AnioGrenada is (AnioKathy + 2).
 
 % 14. La persona que tomó el crucero Neptunia lo hizo 1 year año después de que quién tomó el crucero Silver Shores.
-
+pista14(E):-crucero(neptunia,V1), anio(AnioNeptunia,V1),
+            member(V1,E), select(V1,E,E2),
+            crucero(silverShores,V2), anio(AnioSilverShores,V2),
+            member(V2,E2), select(V2,E2,_),
+            AnioNeptunia is (AnioSilverShores + 1).
 
 % 15. La persona que viajó en el crucero Trinity zarpó 1 año después de quien tomó el crucero Baroness.
-
+pista15(E):-crucero(trinity,V1), anio(AnioTrinity,V1),
+            member(V1,E), select(V1,E,E2),
+            crucero(baroness,V2), anio(AnioBaroness,V2),
+            member(V2,E2), select(V2,E2,_),
+            AnioTrinity is (AnioBaroness + 1).
 
 % 16. Uno de los viajeros fue a Barbados.
 pista16(E):-destino(barbados,V1), member(V1,E).
