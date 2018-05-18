@@ -200,7 +200,7 @@ pista1(E):-viajero(eugene,V1), select(V1,E,E2),
 pista2(E):-destino(trinidad,V1), anio(AnioTrinidad,V1),
            member(V1,E), select(V1,E,E2),
            viajero(lee,V2), anio(AnioLee,V2),
-           member(V2,E2),
+           member(V2,E2), select(V2,E2,_),
            AnioTrinidad is (AnioLee - 1).
 
 % 3. La persona que se embarcó en el crucero Silver Shores es Francis o es quien viajó en 1984.
@@ -214,13 +214,31 @@ pista3(E):-crucero(silverShores,V1), anio(1984,V1), select(V1,E,E2),
 % 4. Los siete viajeros son: la persona que fue a Saint Lucia, Greg, la persona que se
 %    embarcó en el crucero Neptunia, la persona que viajó en 1987, la persona que tomó el crucero Trinity,
 %    la persona que se embarcó en el crucero Baroness y la persona que tomó un crucero en 1986.
-
+pista4(E):-destino(saintLucia,V1), select(V1,E,E2),
+           viajero(greg,V2), select(V2,E2,E3),
+           crucero(neptunia,V3), select(V3,E3,E4),
+           anio(1987,V4), select(V4,E4,E5),
+           crucero(trinity,V5), select(V5,E5,E6),
+           crucero(baroness,V6), select(V6,E6,E7),
+           anio(1986,V7), select(V7,E7,_).
 
 % 5. Sobre los que tomaron el crucero Farralon y el crucero Caprica, uno es Greg y el otro fue a Martinique.
-
+pista5(E):-crucero(farralon,V1), viajero(greg,V1),
+           member(V1,E), select(V1,E,E2),
+           crucero(caprica,V2), destino(martinique,V2),
+           member(V2,E2), select(V2,E2,_).
+           
+pista5(E):-crucero(farralon,V1), destino(martinique,V1),
+           member(V1,E), select(V1,E,E2),
+           crucero(caprica,V2), viajero(greg,V2),
+           member(V2,E2), select(V2,E2,_).
 
 % 6. La persona que fue a Puerto Rico viajó 1 año después de la persona que tomó el crucero Silver Shores.
-
+pista6(E):-destino(puertoRico,V1), anio(AnioPuertoRico,V1),
+           member(V1,E), select(V1,E,E2),
+           crucero(silverShores,V2), anio(AnioSilverShores,V2),
+           member(V2,E2), select(V2,E2_),
+           AnioSilverShores is (AnioPuertoRico + 1).
 
 % 7. Kathy no viajó en el crucero Azure Seas.
 pista7(E):- crucero(azureSeas,V1), select(V1,E,E2),
@@ -228,7 +246,8 @@ pista7(E):- crucero(azureSeas,V1), select(V1,E,E2),
 
 
 % 8. Natasha viajó ya sea en el crucero Baroness o en el crucero de 1985.
-
+pista8(E):-viajero(natalia,V1), crucero(baroness,V1), member(V1,E).
+pista8(E):-viajero(natalia,V1), anio(1985,V1), member(V1,E).
 
 % 9. La persona que fue a Martinique está entre Eugene y la persona que tomó el crucero Caprica.
 
@@ -240,7 +259,8 @@ pista7(E):- crucero(azureSeas,V1), select(V1,E,E2),
 
 
 % 12. Bradley, o fue a Jamaica o más bien tomó el crucero de 1987.
-
+pista12(E):-viajero(bradley,V1), destino(jamaica,V1), member(V1,E).
+pista12(E):-viajero(bradley,V2), anio(1987,V2), member(V2,E).
 
 % 13. La persona que fue a Grenada viajó 2 años después que Kathy.
 
@@ -252,7 +272,7 @@ pista7(E):- crucero(azureSeas,V1), select(V1,E,E2),
 
 
 % 16. Uno de los viajeros fue a Barbados.
-
+pista16(E):-destino(barbados,V1), member(V1,E).
 
 
 
