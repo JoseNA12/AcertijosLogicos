@@ -92,6 +92,21 @@ queries(
         ]).
 
 
+queries(
+        viajes, % identifica las pistas como del acertijo "viajes"
+        Viajes, % la estructura del acertijo va atando todo
+
+        % Preguntas a la estructura
+        [
+          member(viaje(X,_,_,1983),Viajes)
+        ],
+
+        % Respuestas pedidas. Usa los valores determinados en la lista anterior.
+        [
+          ['Caso sin preguntas ', X]
+        ]).
+
+
 % CASO 1: Smoothies
 %
 % Cliente: amelia, mercedes, paulette, isabel, otis
@@ -241,7 +256,7 @@ pista6_V(E):-destino(puertoRico,V1), anio(AnioPuertoRico,V1),
            member(V1,E), select(V1,E,E2),
            crucero(silverShores,V2), anio(AnioSilverShores,V2),
            member(V2,E2), select(V2,E2,_),
-           AnioSilverShores is (AnioPuertoRico + 1).
+           AnioPuertoRico is (AnioSilverShores + 1).
 
 % 7. Kathy no viajó en el crucero Azure Seas.
 pista7_V(E):- crucero(azureSeas,V1), select(V1,E,E2),
@@ -249,19 +264,31 @@ pista7_V(E):- crucero(azureSeas,V1), select(V1,E,E2),
 
 
 % 8. Natasha viajó ya sea en el crucero Baroness o en el crucero de 1985.
-pista8_V(E):-viajero(natalia,V1), crucero(baroness,V1), member(V1,E).
-pista8_V(E):-viajero(natalia,V1), anio(1985,V1), member(V1,E).
+pista8_V(E):-viajero(natalia,V1), crucero(baroness,V1), select(V1,E,E2),
+             anio(1985,V2), member(V2,E2).
+             
+pista8_V(E):-viajero(natalia,V3), anio(1985,V3), select(V3,E,E3),
+             crucero(baroness,V4), member(V4,E3).
+
 
 % 9. La persona que fue a Martinique está entre Eugene y la persona que tomó el crucero Caprica.
-% pista9(E):-destino(martinique,V1), viajero(eugene,V1), member(V1,E).
-% pista9(E):-destino(martinique,V2), crucero(caprica,V2), member(V2,E).
+pista9_V(E):-destino(martinique,V1),viajero(eugene,V1),
+              select(V1,E,E2),
+              crucero(caprica,V2),
+              select(V2,E2,_).
 
-pista9_V(E):-viajero(eugene,V1), anio(AnioEugene,V1),
-           select(V1,E,E2),
-           crucero(caprica,V2), anio(AnioCaprica,V2),
-           select(V1,E2,E3),
-           destino(martinica,V3), anio(AnioMartinica,V3),
-           AnioMartinica < AnioEugene, AnioMartinica > AnioCaprica, select(V3,E3,_).
+pista9_V(E):-destino(martinique,V1),crucero(caprica,V1),
+              select(V1,E,E2),
+              viajero(eugene,V2),
+              select(V2,E2,_).
+
+% pista9_V(E):-viajero(eugene,V1), anio(AnioEugene,V1),
+%            select(V1,E,E2),
+%            crucero(caprica,V2), anio(AnioCaprica,V2),
+%            select(V2,E2,E3),
+%            destino(martinique,V3), anio(AnioMartinique,V3),
+%            select(V3,E3,_),
+%            AnioEugene < AnioMartinique, AnioMartinique < AnioCaprica.
 
 % 10. La persona que tomó el crucero de 1987 no fue la misma que viajó en el crucero Caprica.
 pista10_V(E):-anio(1987,V1), select(V1,E,E2),
@@ -275,12 +302,15 @@ pista11_V(E):-viajero(francis,V1), anio(1983,V1),
 
 pista11_V(E):-viajero(francis,V1), crucero(neptunia,V1),
             member(V1,E), select(V1,E,E2),
-            destino(trinidad,V2), anio(1983,V1),
+            destino(trinidad,V2), anio(1983,V2),
             member(V2,E2), select(V2,E2,_).
 
 % 12. Bradley, o fue a Jamaica o más bien tomó el crucero de 1987.
-pista12_V(E):-viajero(bradley,V1), destino(jamaica,V1), member(V1,E).
-pista12_V(E):-viajero(bradley,V2), anio(1987,V2), member(V2,E).
+pista12_V(E):-viajero(bradley,V1), destino(jamaica,V1), select(V1,E,E2),
+              anio(1987,V2), member(V2,E2).
+              
+pista12_V(E):-viajero(bradley,V1), anio(1987,V1), select(V1,E,E2),
+              destino(jamaica,V2), member(V2,E2).
 
 % 13. La persona que fue a Grenada viajó 2 años después que Kathy.
 pista13_V(E):-destino(grenada,V1), anio(AnioGrenada,V1),
