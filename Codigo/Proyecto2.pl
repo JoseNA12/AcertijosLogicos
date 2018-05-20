@@ -94,16 +94,16 @@ queries(
 
 queries(
         viajes, % identifica las pistas como del acertijo "viajes"
-        Viajes, % la estructura del acertijo va atando todo
+        _,%Viajes, % la estructura del acertijo va atando todo
 
         % Preguntas a la estructura
         [
-          member(viaje(X,_,_,1983),Viajes)
+
         ],
 
         % Respuestas pedidas. Usa los valores determinados en la lista anterior.
         [
-          ['Caso sin preguntas ', X]
+          []
         ]).
 
 
